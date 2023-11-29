@@ -14,12 +14,12 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
-        title: 'Namer App',
+        title: 'DB Web Mobile App',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.white60),
         ),
-        home: MyHomePage(),
+        home: const MyHomePage(),
       ),
     );
   }
@@ -27,19 +27,18 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
-  var favorites=<WordPair>[];
-  var selectedIndex=0;
-  var selectedIndexInAnotherWidget=0;
-  var indexInAnotherWidget=42;
-  var optionASelected=false;
-  var optionBSelected=false;
-  var loadingFromNetwork=false;
+  var favorites = <WordPair>[];
+  var selectedIndex = 0;
+  var selectedIndexInAnotherWidget = 0;
+  var indexInAnotherWidget = 42;
+  var optionASelected = false;
+  var optionBSelected = false;
+  var loadingFromNetwork = false;
 
   void getNext() {
     current = WordPair.random();
     notifyListeners();
   }
-
 
   void toggleFavorite() {
     if (favorites.contains(current)) {
@@ -52,44 +51,61 @@ class MyAppState extends ChangeNotifier {
 }
 
 class MyHomePage extends StatelessWidget {
+  const MyHomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-        children: [
-          SafeArea(
-            child: NavigationRail(
-              extended: false,
-              destinations: [
-                const NavigationRailDestination(
-                  icon: Icon(Icons.home),
-                  label: Text('Home'),
-                ),
-                const NavigationRailDestination(
-                  icon: Icon(Icons.favorite),
-                  label: Text('Favorites'),
-                ),
-              ],
-              selectedIndex: 0,
-              onDestinationSelected: (value) {
-                print('selected: $value');
-              },
-            ),
-          ),
-          Expanded(
-            child: Container(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              child: GeneratorPage(),
-            ),
-          ),
-        ],
+      appBar: AppBar(
+        title: const Text('Mobile Inspection Management'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+                child: const Text('Create Database'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddDatabase()),
+                  );
+                }),
+            ElevatedButton(
+                child: const Text("Add Table"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AddTable()),
+                  );
+                }),
+            ElevatedButton(
+                child: const Text("Add Records"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AddRecords()),
+                  );
+                }),
+            ElevatedButton(
+                child: const Text("View And Edit Records"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ViewRecords()),
+                  );
+                }),
+          ],
+        ),
       ),
     );
   }
 }
 
-
 class GeneratorPage extends StatelessWidget {
+  const GeneratorPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
@@ -133,7 +149,6 @@ class GeneratorPage extends StatelessWidget {
   }
 }
 
-
 class BigCard extends StatelessWidget {
   const BigCard({
     super.key,
@@ -147,12 +162,88 @@ class BigCard extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Card(
-        color: theme.colorScheme.primary,
+        color: theme.colorScheme.secondaryContainer,
         child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
               pair.asLowerCase,
               style: theme.textTheme.displayLarge,
             )));
+  }
+}
+
+class AddDatabase extends StatelessWidget {
+  const AddDatabase({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Second Route"),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Go Back!'),
+        ),
+      ),
+    );
+  }
+}
+
+class AddTable extends StatelessWidget {
+  const AddTable({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text("Add New Table"),
+        ),
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Return to Home Page'),
+          ),
+        ));
+  }
+}
+
+class AddRecords extends StatelessWidget {
+  const AddRecords({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text("Add Records"),
+        ),
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Return to Home Page'),
+          ),
+        ));
+  }
+}
+class ViewRecords extends StatelessWidget {
+  const ViewRecords({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text("View And Edit Records"),
+        ),
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Return to Home Page'),
+          ),
+        ));
   }
 }
