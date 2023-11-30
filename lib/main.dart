@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'addtable.dart';
+import 'addrecords.dart';
+import 'viewedit.dart';
 
 void main() {
   runApp(const MyApp());
@@ -53,6 +59,12 @@ class MyAppState extends ChangeNotifier {
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
+    Future<http.Response> fetchAlbum() {
+    return http.get(Uri.parse('https://catfact.ninja/fact'));
+    }
+    
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,8 +105,15 @@ class MyHomePage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ViewRecords()),
+                    MaterialPageRoute(
+                        builder: (context) => const ViewRecords()),
                   );
+                }),
+            ElevatedButton(
+                child: const Text("Sync Data"),
+
+                onPressed: () {
+                print(jsonDecode(fetchAlbum().toString()));
                 }),
           ],
         ),
@@ -189,61 +208,5 @@ class AddDatabase extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class AddTable extends StatelessWidget {
-  const AddTable({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("Add New Table"),
-        ),
-        body: Center(
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Return to Home Page'),
-          ),
-        ));
-  }
-}
-
-class AddRecords extends StatelessWidget {
-  const AddRecords({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("Add Records"),
-        ),
-        body: Center(
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Return to Home Page'),
-          ),
-        ));
-  }
-}
-class ViewRecords extends StatelessWidget {
-  const ViewRecords({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("View And Edit Records"),
-        ),
-        body: Center(
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Return to Home Page'),
-          ),
-        ));
   }
 }
